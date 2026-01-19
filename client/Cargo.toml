@@ -11,12 +11,10 @@ path = "src/main.rs"
 utils = { workspace = true }
 tokio = { workspace = true, features = ["rt", "rt-multi-thread", "macros"] }
 opentelemetry = { workspace = true }
-opentelemetry_sdk = {workspace = true}
 opentelemetry-http = { workspace = true }
+opentelemetry-semantic-conventions = { workspace = true }
 hyper-util = { workspace = true }
 hyper = { workspace = true }
 http-body-util = { workspace = true }
 tracing = { workspace = true }
-once_cell = {workspace = true}
-hyper-rustls = "0.27.7"
-url = "2.5.7"
+url = { workspace = true }

@@ -1,10 +1,12 @@
-// OpenTelemetry imports
-use opentelemetry::global;
+use opentelemetry::{global, KeyValue};
 use opentelemetry_otlp::SpanExporter;
 use opentelemetry_sdk::trace::SdkTracerProvider;
 use opentelemetry_sdk::{propagation::TraceContextPropagator, Resource};
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::util::SubscriberInitExt;
+use opentelemetry_resource_detectors::HostResourceDetector;
+use opentelemetry_resource_detectors::OsResourceDetector;
+use opentelemetry_semantic_conventions::attribute::HOST_NAME;
 
 pub fn init_logging(){
     tracing_subscriber::registry()
@@ -28,7 +30,6 @@ pub fn init_tracing(resource: Resource) -> SdkTracerProvider {
 pub fn build_tracer_provider(resource: Resource) -> SdkTracerProvider {
     let exporter = SpanExporter::builder()
         .with_http()
-        // .with_protocol(Protocol::HttpBinary)
         .build()
         .unwrap();
 
@@ -38,4 +39,23 @@ pub fn build_tracer_provider(resource: Resource) -> SdkTracerProvider {
         .with_resource(resource)
         .build();
     provider
+}
+
+pub fn build_default_resource() -> Resource {
+    // Use build with default set of detectors (e.g. to detect attributes from `OTEL_RESOURCE_ATTRIBUTES` env var)
+    Resource::builder()
+        // Add OS and Host resource detectors (for e.g. `host.arch` and `os.type`)
+        .with_detector(Box::new(OsResourceDetector))
+        .with_detector(Box::new(HostResourceDetector::default()))
+        // Add custom attributes, e.g. `host.name` not added by the host detector
+        .with_attribute(
+            KeyValue::new(
+                HOST_NAME,
+                hostname::get()
+                    .unwrap_or("unknown-host".into())
+                    .to_string_lossy()
+                    .into_owned()
+            )
+        )
+        .build()
 }

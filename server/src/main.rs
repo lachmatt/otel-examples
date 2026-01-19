@@ -1,23 +1,15 @@
 use actix_web::{get, App, HttpResponse, HttpServer, Responder};
-use once_cell::sync::Lazy;
 use opentelemetry_instrumentation_actix_web::RequestTracing;
-use opentelemetry_sdk::Resource;
-use utils::{init_logging, init_tracing};
+use utils::{init_logging, init_tracing, build_default_resource};
 use tracing::info;
-use tokio::time::sleep;
-
-static RESOURCE: Lazy<Resource> = Lazy::new(|| {
-    Resource::builder()
-        .build()
-});
-
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-
     init_logging();
+
     // Initialize the OpenTelemetry tracer provider
-    let provider = init_tracing(RESOURCE.clone());
+    let resource = build_default_resource();
+    let provider = init_tracing(resource);
 
     HttpServer::new(move|| {
         App::new()

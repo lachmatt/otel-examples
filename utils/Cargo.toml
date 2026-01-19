@@ -9,3 +9,7 @@ opentelemetry_sdk = { workspace = true }
 opentelemetry-otlp = { workspace = true, features = ["grpc-tonic", "metrics"]}
 tracing-subscriber = { workspace = true }
 tracing = { workspace = true }
+once_cell = "1.21.3"
+hostname = "0.4.2"
+opentelemetry-resource-detectors = { workspace = true }
+opentelemetry-semantic-conventions = { workspace = true }
