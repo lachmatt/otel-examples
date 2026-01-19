@@ -1793,6 +1793,7 @@ dependencies = [
  "once_cell",
  "opentelemetry-instrumentation-actix-web",
  "opentelemetry_sdk",
+ "tokio",
  "tracing",
  "utils",
 ]

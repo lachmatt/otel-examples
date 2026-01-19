@@ -14,3 +14,4 @@ utils = { workspace = true }
 once_cell = { workspace = true }
 opentelemetry_sdk = {workspace = true}
 tracing = { workspace = true }
+tokio = { workspace = true }

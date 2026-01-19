@@ -4,6 +4,7 @@ use opentelemetry_instrumentation_actix_web::RequestTracing;
 use opentelemetry_sdk::Resource;
 use utils::{init_logging, init_tracing};
 use tracing::info;
+use tokio::time::sleep;
 
 static RESOURCE: Lazy<Resource> = Lazy::new(|| {
     Resource::builder()
@@ -39,5 +40,7 @@ async fn main() -> std::io::Result<()> {
 async fn get_posts() -> impl Responder{
 
     info!("Serving request to /posts endpoint");
+    // Simulate doing some time-consuming work
+    tokio::time::sleep(std::time::Duration::from_millis(50)).await;
     HttpResponse::InternalServerError()
 }
